@@ -1,32 +1,29 @@
 pipeline {
     agent any
 
-    stages {
-        stage ('Compile Stage') {
+    try {
+		stages {
+			stage ('Compile Stage') {
 
-            steps {
-                
-                    sh 'mvn clean compile'
-                
-            }
-        }
+				steps {                
+					    sh 'mvn clean compile'
+                				}
+			}
+			stage ('Testing Stage') {
 
-        stage ('Testing Stage') {
-
-            steps {
-                
-                    sh 'mvn test'
-                
-            }
-        }
-
-
-        stage ('Deployment Stage') {
-            steps {
-                
-                    sh 'mvn deploy'
-                
-            }
-        }
-    }
+				steps { 
+					    sh 'mvn test'
+                }
+			}
+			stage ('Deployment Stage') {
+				steps {  
+					    sh 'mvn deploy'
+                }
+			}
+		}
+    } catch (err) {
+		emailtext body: "$(err)", subject : 'failure', to: 'asifdevops@gmail.com'
+		
+	}
+		
 }
