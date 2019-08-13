@@ -1,11 +1,16 @@
-node {
-    try {
-        sh 'exit 1'
-        currentBuild.result = 'SUCCESS'
-    } catch (any) {
-        currentBuild.result = 'FAILURE'
-        throw any //rethrow exception to prevent the build from proceeding
-    } finally {
-        step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'asifdevops@gmail.com', sendToIndividuals: true])
+pipeline {
+    agent any
+    
+    stages {
+        stage('Ok') {
+            steps {
+                echo "Ok"
+            }
+        }
+    }
+    post {
+        always {
+            emailext body: 'A Test EMail', recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']], subject: 'Test'
+        }
     }
 }
