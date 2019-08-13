@@ -1,29 +1,11 @@
-pipeline {
-    agent any
-
+node {
     try {
-		stages {
-			stage ('Compile Stage') {
-
-				steps {                
-					    sh 'mvn clean compile'
-                				}
-			}
-			stage ('Testing Stage') {
-
-				steps { 
-					    sh 'mvn test'
-                }
-			}
-			stage ('Deployment Stage') {
-				steps {  
-					    sh 'mvn deploy'
-                }
-			}
-		}
-    } catch (err) {
-		emailtext body: "$(err)", subject : 'failure', to: 'asifdevops@gmail.com'
-		
-	}
-		
+        sh 'exit 1'
+        currentBuild.result = 'SUCCESS'
+    } catch (any) {
+        currentBuild.result = 'FAILURE'
+        throw any //rethrow exception to prevent the build from proceeding
+    } finally {
+        step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'me@me.com', sendToIndividuals: true])
+    }
 }
