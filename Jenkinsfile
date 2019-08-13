@@ -6,6 +6,6 @@ node {
         currentBuild.result = 'FAILURE'
         throw any //rethrow exception to prevent the build from proceeding
     } finally {
-        step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'asifdevops.com', sendToIndividuals: true])
+        step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'asifdevops@gmail.com', sendToIndividuals: true])
     }
 }
